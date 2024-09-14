@@ -23,14 +23,18 @@ For each query print the result in a new line.
 1 <= len(s) <= 100 1 <= len(ti) <= 110
 
 ### Sample Input:
-10 4 consider filters filers entitled tilers litter dames filling grasses fitter
-1 litter 1 dame 2 con 3 filter
-7
+10 4 
+consider filters filers entitled tilers litter dames filling grasses fitter
+1 litter 
+1 dame 
+2 con 
+3 filter
 
 ### Sample Output:
-1 0 1
-consider 5
-filers filters fitter litter tilers
+1 
+0 
+1 consider 
+5 filers filters fitter litter tilers
 
 #### Note:
 1. Only trie should be used for storing the words in the dictionary.
