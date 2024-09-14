@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string>
+#include<vector>
 
 using namespace std;
 
@@ -46,6 +47,7 @@ class trieHarder
 {
     private:
         trieNode* root;
+        char alphabets[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
     public:
         trieHarder(){
@@ -84,9 +86,25 @@ class trieHarder
             return node->isEnd();
         }
 
-        void beginsWith(string prefix)
+        void autocomplete(trieNode* root, string str, vector<string>& result)
+        {
+            if(root->isEnd()){
+                result.push_back(str);
+            }
+
+            // iterate through all letters; if present, then iterate using recuresion; else return    
+            for(int i=0; i<26; i++){
+                if(root->hasletter(alphabets[i])){
+                    autocomplete(root->getletter(alphabets[i]), str+alphabets[i], result);
+                }
+
+            }
+        }
+
+        vector<string> beginsWith(string prefix)
         {
             trieNode* node = root;
+            vector<string> result;
 
             // iterate to the prefix
             for(int i=0; i<prefix.size(); i++){
@@ -95,16 +113,17 @@ class trieHarder
                 }
                 else{
                     cout << "error: prefix not found" << endl;
-                    return;
+                    return result;
                 }
             }
 
             // print all the possible words from here
-            
+            string str = "" ;
+            autocomplete(node, str, result);
 
+            return result;
         }
 
-        
 };
 
 
@@ -144,7 +163,15 @@ int main()
                 break;
             
             case 2 : {
-
+                vector<string> result = dict->beginsWith(t[j]);
+                if(result.size()){
+                    cout << result.size() << endl;
+                    for(int i=0; i<result.size(); i++){
+                        cout << t[j] << result[i] << endl;
+                    }
+                }
+                else    
+                    cout << "0" << endl;
             }
 
             case 3 : {
