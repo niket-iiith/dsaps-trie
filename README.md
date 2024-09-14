@@ -1,4 +1,6 @@
-# Problem Statement:
+# TRIE-HARDER
+
+## Problem Statement:
 Design an efficient spell checker using the Trie data structure which supports the functionalities mentioned below.
 1. Spell Check: Check if the input string is present in the dictionary.
 2. Autocomplete: Find all the words in the dictionary which begin with the given input. 3. Autocorrect: Find all the words in the dictionary which are at an edit distance(Levenshtein distance) of at most 3 from the given input.

@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<math.h>
 
 using namespace std;
 
@@ -97,7 +98,6 @@ class trieHarder
                 if(root->hasletter(alphabets[i])){
                     autocomplete(root->getletter(alphabets[i]), str+alphabets[i], result);
                 }
-
             }
         }
 
@@ -121,6 +121,47 @@ class trieHarder
             string str = "" ;
             autocomplete(node, str, result);
 
+            return result;
+        }
+
+        // Helper function to calculate edit distance
+        int calculateEditDistance(const string& word1, const string& word2) {
+            int n = word1.length();
+            int m = word2.length();
+            vector<vector<int> > dp(n + 1, vector<int>(m + 1,0));
+
+            for(int i = 0; i <= n; i++) dp[i][0] = i;
+            for(int j = 0; j <= m; j++) dp[0][j] = j;
+
+            for(int i = 1; i <= n; i++) {
+                for(int j = 1; j <= m; j++) {
+                    if(word1[i - 1] == word2[j - 1])
+                        dp[i][j] = dp[i - 1][j - 1];
+                    else
+                        dp[i][j] = 1 + min(dp[i - 1][j], min(dp[i][j - 1], dp[i - 1][j - 1]));
+                }
+            }
+
+            return dp[n][m];
+        }
+
+        void dfs(trieNode* node, string str, vector<string>& result, string word){
+            if(node->isEnd() && calculateEditDistance(str, word) <= 3) {
+                result.push_back(str);
+            }
+
+            for (int i = 0; i < 26; i++) {
+                if (node->hasletter(alphabets[i])) {
+                    dfs(node->getletter(alphabets[i]), str + alphabets[i], result, word);
+                }
+            }
+        }
+
+        vector<string> autocorrect(string word){
+            vector<string> result;
+            string str = "" ;
+            dfs(root, str, result, word);
+            sort(result.begin(), result.end());
             return result;
         }
 
@@ -162,9 +203,10 @@ int main()
             }
                 break;
             
+            // auto-complete
             case 2 : {
                 vector<string> result = dict->beginsWith(t[j]);
-                if(result.size()){
+                if(result.size() > 0){
                     cout << result.size() << endl;
                     for(int i=0; i<result.size(); i++){
                         cout << t[j] << result[i] << endl;
@@ -173,10 +215,21 @@ int main()
                 else    
                     cout << "0" << endl;
             }
+                break;
 
+            // auto-correct
             case 3 : {
-
+                vector<string> result = dict->autocorrect(t[j]);
+                if(result.size() > 0){
+                    cout << result.size() << endl;
+                    for(int i=0; i<result.size(); i++){
+                        cout << result[i] << endl;
+                    }
+                }
+                else    
+                    cout << "0" << endl;
             }
+                break;
         }
     }
 
